@@ -1,0 +1,47 @@
+name: DATE_AND_TIME_PICKER (1)
+description: CALENDER
+host: EXCEL
+api_set: {}
+script:
+  content: |
+    $("#run").click(() => tryCatch(run));
+
+    async function run() {
+      await Excel.run(async (context) => {
+        const sheet = context.workbook.worksheets.getActiveWorksheet();
+        const cell = context.workbook.getActiveCell();
+        const iptBox = (document.getElementById("datepicker") as any).value;
+        cell.values = [[iptBox]];
+        await context.sync();
+      });
+    }
+
+    /** Default helper for invoking an action and handling errors. */
+    async function tryCatch(callback) {
+      try {
+        await callback();
+      } catch (error) {
+        // Note: In a production add-in, you'd want to notify the user through your add-in's UI.
+        console.error(error);
+      }
+    }
+  language: typescript
+template:
+  content: "<h4 class=\"title\">Select the date&time to insert the cell.</h4>\n<button id=\"run\" class=\"ms-Button\">\n  <span class=\"ms-Button-label\">Insert</span>\n</button>\n\n<head>\n\t<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/themes/material_green.min.css\">\n</head>\n\n<body>\n\t<input class=\"input\" type=\"text\" id=\"datepicker\" data-enable-time='true' data-time_24hr=\"true\">\n\n\t<script src=\"https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js\"></script>\n\t<script>\n\t\tdocument.addEventListener(\"DOMContentLoaded\", function() {\n      flatpickr(\"#datepicker\", {\n        enableTime: true,\n        noCalendar: false,\n        dateFormat: \"y/m/d H:i\",\n      });\n    });\n\t</script>\n</body>"
+  language: html
+style:
+  content: "body {\r\n        background: linear-gradient(5deg, \r\n        rgba(250, 194, 194, 0.5), \r\n        rgba(241, 216, 190, 0.5), \r\n        rgba(241, 241, 182, 0.5), \r\n        rgba(224, 236, 212, 0.5), \r\n        rgba(205, 235, 220, 0.5), \r\n        rgba(211, 233, 233, 0.5), \r\n        rgba(168, 206, 245, 0.5), \r\n        rgba(157, 157, 245, 0.5), \r\n        rgba(174, 115, 233, 0.5), \r\n        rgba(243, 60, 243, 0.5)\r\n        );\r\n        margin: 0;\r\n        height: 100vh;\r\n        display: flow-root;\r\n        align-items: center;\r\n        justify-content: center;\r\n      }\r\n        body {\r\n            font-family: Arial, sans-serif;\r\n            margin: 0;\r\n            padding: 0;\r\n            background-color: #f4f4f4;\r\n        }\r\n.ms-Button{\r\n  display: inline-block;\r\n    padding: 5px 10px;\r\n    font-size: 10px;\r\n    text-align: center;\r\n    text-decoration: none;\r\n    color: #ffffff;\r\n    background-color: rgb(72, 213, 248);\r\n    border: none;\r\n    border-radius: 5px;\r\n    cursor: pointer;\r\n    transition: background-color 0.3s ease;\r\n    margin-bottom: 5px;\r\n}\r\n.input {\r\n    display: block;\r\n    width: 285px;\r\n    padding: 10px;\r\n    font-size: 16px;\r\n    color: #333;\r\n    border: 1px solid #ccc;\r\n    border-radius: 5px;\r\n    transition: border-color 0.3s ease;\r\n}\r\n\r\n.input:focus {\r\n    border-color: #4CAF50;\r\n    outline: none;\r\n}\r\n.title {\r\n    font-family: 'Times New Roman', serif;\r\n    font-size: 18px;\r\n    color: rgb(58, 37, 245);\r\n    text-align: left;\r\n    margin-bottom: 10px;\r\n}"
+  language: css
+libraries: |+
+  https://appsforoffice.microsoft.com/lib/1/hosted/office.js
+  @types/office-js
+
+  office-ui-fabric-js@1.4.0/dist/css/fabric.min.css
+  office-ui-fabric-js@1.4.0/dist/css/fabric.components.min.css
+
+  core-js@2.4.1/client/core.min.js
+  @types/core-js
+
+  jquery@3.1.1
+  @types/jquery@3.3.1
+
